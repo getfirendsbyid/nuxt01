@@ -1,31 +1,34 @@
 import { _AsyncData } from 'nuxt3/dist/app/composables/asyncData'
 import { hash } from 'ohash'
+import { message } from 'ant-design-vue';
 
 const fetch = (url: string, options?: any): Promise<any> => {
-  const { $config  } = useNuxtApp()
-  const reqUrl =  'http://127.0.0.1' + url // 你的接口地址
+  const config = useRuntimeConfig()
+
+  // Access baseURL universally
+  console.log(config.public.apiBase)
+  const reqUrl =  config.public.apiBase + url // 你的接口地址
   // 不设置key，始终拿到的都是第一个请求的值，参数一样则不会进行第二次请求
    const key = hash(JSON.stringify(options) + '_' + url) 
   // 如果需要统一加参数可以options.params.token = 'xxx'
   return new Promise((resolve, reject) => {
     useFetch(reqUrl, { ...options, key }).then(({ data, error }: _AsyncData<any>) => {
-     console.log(options,12312)
+     console.log(data,12312)
 			if (error.value) {
         reject(error.value)
         return
       }
-      const value = data.value
-      if (!value) {
+      const code = data.value.code
+     
+      console.log(code !=200)
+      if (code !=200) {
         // 这里处理错你自定义的错误，例如code !== 1
-        throw createError({
-          statusCode: 500,
-          statusMessage: reqUrl,
-          message: '自己后端接口的报错信息',
-        })
+        message.error(data.value.err_msg,3)
       } else {
-        resolve(value)
+        resolve(data)
       }
     }).catch((err: any) => {
+      message.error('请求错误,请联系管理员或刷新网页')
       console.log(err)
       reject(err)
     })

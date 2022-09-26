@@ -1,33 +1,34 @@
 <template>
- <ImgListHeroList></ImgListHeroList>
+  <ImgListHeroList></ImgListHeroList>
 </template>
 <script setup lang="ts">
-import { ref, reactive, onMounted, getCurrentInstance }  from 'vue'
- //引入 api中对应的接口请求
-interface ArrayList {
-    banner: object
-}
-const state:ArrayList = reactive({
- 		banner:[],
+import {
+  ref,
+  reactive,
+  onMounted,
+  getCurrentInstance,
+  defineComponent,
+} from 'vue'
+import { useNotification, NotificationPlacement } from 'naive-ui'
+// content
+definePageMeta({
+  layout: 'default',
 })
 
-//config2
-const params = {page:1,limit:8}
+const params : {
+    page: number;
+    limit: number;
+}
 
-// useFetch('http://127.0.0.1/api/games/homeList',{method:'post',params}).then(({ data:cart }) => {
-//   	console.log(cart)
-   
-//   })
-  const res = await useFetch("http://127.0.01.1/api/games/homeList", {
-  method: "get",
-  params,
-});
-console.log(res)
-
-
-definePageMeta({
-  layout: "default",
-});
-
+//获取游戏列表
+function getHomeList() {
+      getHomeList(params).then((res) => {
+        if (res.code == 200) {
+          this.homeList = res.data
+          console.log(this.homeList)
+        } else {
+        }
+      })
+    }
 
 </script>

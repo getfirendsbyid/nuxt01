@@ -1,4 +1,4 @@
-import Http from '@/utils/request'
+import Http from '@/utils/http'
  
 export const getHomeList = (params?: any) => {
     console.log(params)

@@ -1,12 +1,8 @@
 import Http from '@/utils/http'
 
 /**
- * 获取标签
+ * 获取首页列表
  */
-export const useGetTags = (params?: { size?: number, page?: number }) => {
-  return Http.get('/app/v1/tags', params)
-}
-
 export const getHomeList = (params?: any) => {
     console.log(params)
     return Http.post('/api/games/homeList', params)
