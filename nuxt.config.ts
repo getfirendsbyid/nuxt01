@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     apiSecret: '', // can be overridden by NUXT_API_SECRET environment variable
     public: {
-      apiBase: 'http://127.0.0.1', // can be overridden by NUXT_PUBLIC_API_BASE environment variable
+      apiBase: 'http://127.0.0.1' // can be overridden by NUXT_PUBLIC_API_BASE environment variable
     }
   },
   modules: [
@@ -17,10 +17,7 @@ export default defineNuxtConfig({
     'nuxt-icon',
     '@nuxtjs/dotenv' // 指定打包时使用的dotenv
   ],
-  toast: {// toast模块的配置
-    position: 'top-center', 
-    duration: 2000
-  },
+
   components: {
     global: true,
     dirs: [
@@ -34,10 +31,10 @@ export default defineNuxtConfig({
     // viteNode: true,
   },
   vueuse: {
-    ssrHandlers: true
+    ssrHandlers: false
   },
   colorMode: {
     classSuffix: ''
   }
-  
+
 })

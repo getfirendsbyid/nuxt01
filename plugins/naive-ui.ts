@@ -1,5 +1,4 @@
-import Naive from "naive-ui";
-import 'ant-design-vue/dist/antd.css';
+import Naive from 'naive-ui'
 
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use(Naive)
