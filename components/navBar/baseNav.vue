@@ -7,8 +7,8 @@
             <!-- Mobile menu button-->
             <DisclosureButton class="inline-flex items-center justify-center rounded-md p-2 border-1 border-white text-white hover:bg-gray-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
               <span class="sr-only">打开菜单</span>
-              <Bars3Icon v-if="!open" class="block h-6 w-6 " aria-hidden="true" />
-              <XMarkIcon v-else class="block h-6 w-6 " aria-hidden="true" />
+              <Bars3Icon v-if="!open" class="block h-6 w-6 " aria-hidden="true" @click="closeOrOpen(!open)" />
+              <XMarkIcon v-else class="block h-6 w-6 " aria-hidden="true" @click="closeOrOpen(!open)" />
             </DisclosureButton>
           </div>
           <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
@@ -55,13 +55,19 @@
               >
                 <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <MenuItem v-slot="{ active }">
-                    <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">个人主页</a>
+                    <NuxtLink to="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">
+                      个人主页
+                    </NuxtLink>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
-                    <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">设置</a>
+                    <NuxtLink to="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">
+                      设置
+                    </NuxtLink>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
-                    <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">退出</a>
+                    <NuxtLink to="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">
+                      退出
+                    </NuxtLink>
                   </MenuItem>
                 </MenuItems>
               </transition>
@@ -84,23 +90,31 @@
           </NuxtLink>
         </div>
       </DisclosurePanel>
-      <MenuBaseMenu />
     </Disclosure>
+
+    <DrawerBaseDrawer :navigation="navigation" :active="active" />
   </div>
 </template>
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
-import { reactive } from 'vue'
+import { ref } from 'vue'
 // 导航栏相关逻辑 start
-const navigation = reactive([
+const navigation = ref([
   { name: '首页', href: '/', current: true },
   { name: '游戏列表', href: '/games', current: false },
   { name: '语音列表', href: '/audio', current: false }
 ])
 
+const active = ref(true)
+
+function closeOrOpen (bool) {
+  active.value = bool
+  console.log(active)
+}
+
 function switchNavBar (index) {
-  navigation.forEach((item) => {
+  navigation.value.forEach((item) => {
     item.current = false
   })
   navigation[index].current = true
