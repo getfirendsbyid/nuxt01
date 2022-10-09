@@ -5,23 +5,39 @@
       <NuxtLink v-for="(item,index) in navigation" :key="index" :class="[item.current ? 'bg-gray-900 text-black' : 'text-gray-700 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']" :to="item.href">
         {{ item.name }}
       </NuxtLink>
-      {{ attrs }}
+     
     </n-drawer-content>
   </n-drawer>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
+<script lang="ts">
+import { ref ,defineComponent } from 'vue'
 import type { DrawerPlacement } from 'naive-ui'
 
-defineProps({
+export default defineComponent({
+  props:{
   active: Boolean,
   navigation: Array
+  },
+  setup (props,context) {
+      const active = ref(props.active)
+      console.log(active)
+      const placement = ref<DrawerPlacement>('left')
+
+      function close() {
+        console.log(active)
+        
+        context.emit('eventCloseOrOpen', true)
+      }
+        return {
+      active: active,
+      placement: placement,
+      close
+  }
+
+}
+
 })
 
-const placement = ref<DrawerPlacement>('left')
-const emit = defineEmits(['closeOrOpen'])
-function close () {
-  emit('closeOrOpen', false)
-}
+
 </script>
