@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/no-multiple-template-root -->
 <template>
-  <n-drawer v-model:show="active" :width="200" :placement="placement" :on-after-leave="close()">
+
+  <n-drawer v-model:show="active" :width="200" :placement="placement" close-on-esc >
     <n-drawer-content title="关闭" closable>
       <NuxtLink v-for="(item,index) in navigation" :key="index" :class="[item.current ? 'bg-gray-900 text-black' : 'text-gray-700 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']" :to="item.href">
         {{ item.name }}
@@ -21,20 +22,12 @@ export default defineComponent({
   },
   setup (props,context) {
       const active = ref(props.active)
-      console.log(active)
       const placement = ref<DrawerPlacement>('left')
-
-      function close() {
-        console.log(active)
-        
-        context.emit('eventCloseOrOpen', true)
+      console.log(props,'子组件')
+      return {
+        active: active,
+        placement: placement,
       }
-        return {
-      active: active,
-      placement: placement,
-      close
-  }
-
 }
 
 })

@@ -7,7 +7,7 @@
             <!-- Mobile menu button-->
             <DisclosureButton class="inline-flex items-center justify-center rounded-md p-2 border-1 border-white text-white hover:bg-gray-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
               <span class="sr-only">打开菜单</span>
-              <Bars3Icon v-if="!active" class="block h-6 w-6 " @click="closeOrOpen(false)" />
+              <Bars3Icon v-if="!active" class="block h-6 w-6 " @click="closeOrOpen(true)" />
               <XMarkIcon v-else class="block h-6 w-6 " @click="closeOrOpen(false)" />
             </DisclosureButton>
           </div>
@@ -79,13 +79,14 @@
 
     </Disclosure>
 
-    <DrawerBaseDrawer :navigation="navigation" :active="active" @eventCloseOrOpen="eventCloseOrOpen" />
+    <DrawerBaseDrawer :navigation="navigation" :active="active"  />
   </div>
 </template>
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
+
 // 导航栏相关逻辑 start
 const navigation = ref([
   { name: '首页', href: '/', current: true },
@@ -95,14 +96,10 @@ const navigation = ref([
 
 const active = ref(false)
 
+
 function closeOrOpen (bool) {
   active.value = bool
   console.log(active,'')
-}
-function eventCloseOrOpen (bool) {
-  console.log(bool)
-  active.value = bool
-  console.log(active,'被触发')
 }
 
 
