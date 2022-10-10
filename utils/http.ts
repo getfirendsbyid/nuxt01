@@ -6,7 +6,6 @@ const fetch = (url: string, options?: any): Promise<any> => {
   const config = useRuntimeConfig()
 
   // Access baseURL universally
-  console.log(config.public.apiBase)
   const reqUrl =  config.public.apiBase + url // 你的接口地址
   // 不设置key，始终拿到的都是第一个请求的值，参数一样则不会进行第二次请求
    const key = hash(JSON.stringify(options) + '_' + url) 
