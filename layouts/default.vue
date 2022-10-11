@@ -2,5 +2,6 @@
 <template>
     <NavBarBaseNav/>
   <slot></slot>
+  <AudioPlayer/>
 </template>
 

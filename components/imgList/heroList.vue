@@ -9,21 +9,24 @@
           {{ item.name }}
         </h3>
       </NuxtLink>
-      <div> <audio :src="item.selectAudio" controls /> 选中</div>
-      <div>  <audio :src="item.banAudio" controls />ban掉</div>
+  
     </div>
   </div>
+
 </template>
 
 <script lang="ts">
 import { ref, toRefs, defineComponent } from 'vue'
+
 export default defineComponent({
   props: {
     datas: Array
   },
   setup (props, context) {
     const { datas } = toRefs(props)
-
+    const play = (song: any)=> {
+        this.$player.play(song)
+      }
     return {
       datas
     }
