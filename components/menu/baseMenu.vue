@@ -1,5 +1,5 @@
 <template>
-	  <n-config-provider :theme-overrides="themeOverrides">
+	  <n-config-provider :theme-overrides="themeOverrides" >
       <n-menu v-model:value="activeKey" mode="horizontal" :options="menuOptions"  />
   </n-config-provider>
 </template>

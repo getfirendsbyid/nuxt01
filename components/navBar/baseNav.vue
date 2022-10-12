@@ -1,6 +1,6 @@
 <template>
   <div class="bg-local bg-clip-border bg-no-repeat bg-center md:bg-clip-padding" style="height: 16rem; background-color: rgba(40,42,44,.6);background-image: url('https://pic.rmb.bdstatic.com/bjh/30cf6d2919e00aadde0adffe89d436b1.jpeg')">
-    <Disclosure v-slot="{ }" as="nav" class="bg-gray-700 bg-opacity-40 ">
+    <Disclosure v-slot="{ }" as="nav" class="bg-gray-700 bg-opacity-40 fixed justify-center w-auto  h-auto top-0 inset-x-0" >
       <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 bg-local md:bg-fixed bg-clip-padding" style="">
         <div class="relative flex h-16 items-center justify-between">
           <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -19,7 +19,7 @@
             <div class="hidden sm:ml-6 sm:block">
               <div class="flex space-x-4">
                 <client-only>
-                  <MenuBaseMenu />
+                  <MenuBaseMenu  />
                 </client-only>
               </div>
             </div>

@@ -1,7 +1,7 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-    <NavBarBaseNav/>
-  <slot></slot>
+    <NavBarBaseNav />
+  <slot ></slot>
   <AudioPlayer/>
 </template>
 
