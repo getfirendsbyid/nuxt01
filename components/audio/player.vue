@@ -1,244 +1,267 @@
 <template>
-  <div class="fixed  justify-center w-auto  h-auto bottom-0 inset-x-0  bg-white text-black border-t-2 border-t-red-500">
+  <div class="fixed  justify-center w-auto  h-auto bottom-0 inset-x-0  bg-white text-black " >    
+    <n-progress
+    type="line"
+    :percentage=" parseInt(playProgress)"
+    :border-radius="4"
+    color="red"
+    height="2"
+   
+    :rail-color="changeColor('#C20C0C', { alpha: 0.2 })"
+  />
     <div class=" flex flex-row justify-around ">
-
       <div class="flex flex-row justify-between  items-center text-center  w-auto">
-      <div class="flex flex-row justify-center items-center text-center h-8">
+        <div class="flex flex-row justify-center items-center text-center h-8">
 
-        <img class="rounded-full h-full w-8 object-top  flex items-center object-cover text-center justify-center" 
-            src="https://game.gtimg.cn/images/lol/act/img/skinloading/1000.jpg" />
-        <div class="flex flex-col ml-4  ">
-         
+          <img class="rounded-full h-full w-8 object-top  flex items-center object-cover text-center justify-center"
+               src="https://game.gtimg.cn/images/lol/act/img/skinloading/1000.jpg" />
+          <div class="flex flex-col ml-4  ">
+            {{ transTime(audioCurrent) }}/{{ transTime(audioDuration) }}
+
+          </div>
         </div>
       </div>
-    </div>
+
       <div class="flex flex-row justify-between  items-center">
 
-        <n-icon size="30" @click="lastMusic" title="上一首">
+        <n-icon size="30"
+                @click="lastMusic"
+                title="上一首">
           <PlaySkipBackSharp />
         </n-icon>
 
-        <n-icon size="60" class="ml-2 mr-2" color="red" title="播放" @click="startPlayOrpause">
+        <n-icon size="60"
+                class="ml-2 mr-2"
+                color="red"
+                title="播放"
+                @click="onPlay"
+                v-if="!playStatus">
           <PlayCircle />
-         
+
         </n-icon>
-        <n-icon size="30" v-if="false" title="暂停">
-          <Pause style="display:none" />
+        <n-icon size="60"
+        class="ml-2 mr-2"
+                color="red"
+                v-else
+                @click="onPause"
+                title="暂停">
+                
+          <PauseCircleOutline  />
         </n-icon>
-        
-        <n-icon size="30"  @click="nextMusic" title="下一首">
+
+        <n-icon size="30"
+               
+                title="下一首">
           <PlaySkipForwardSharp />
         </n-icon>
-     
-      </div> 
+
+      </div>
       <div class="flex flex-row justify-between  items-center">
-        <n-icon size="30" color="#000"  title="菜单">
+        <n-icon size="30"
+                color="#000"
+                title="点击下载语音">
+          <ArrowDown />
+        </n-icon>
+        <n-icon size="30"
+                color="#000"
+                title="菜单">
           <MenuSharp />
         </n-icon>
-        </div>
+   
+        
+      </div>
+
 
     </div>
   </div>
-
+  
+  {{urls}}
+  <audio ref="audioRef"
+         :src="urls[0].url"
+         @canplay="onCanplay"></audio>
 </template>
 
 <script lang="ts">
-import {} from 'vue'
+import { ref,toRefs } from 'vue'
 import {
   PlaySkipBackSharp,
   PlaySkipForwardSharp,
   PlayCircle,
-  Pause,
+  PauseCircleOutline,
   RepeatOutline,
-  MenuSharp
+  MenuSharp,
+  ArrowDown
 } from '@vicons/ionicons5'
+import { changeColor } from 'seemly'
 export default defineComponent({
   components: {
     PlaySkipBackSharp,
     PlaySkipForwardSharp,
     PlayCircle,
-    Pause,
+    PauseCircleOutline,
     RepeatOutline,
-    MenuSharp
+    MenuSharp,
+    ArrowDown
   },
-  setup() {
-    
-let audio = ref()
-let aplayer = ref('src/static/img/aplayer/play.png') // 当前时间
-let MusiccurrentTime: Number = ref() // 歌曲总时间
-let Musicduration: Number = ref() // 进度条
-let progress: Number = ref() // 默认暂停状态
-
-let playing: Boolean = false // 歌曲音量
-
-let volumes: Number = ref(70)
-
-let i: Number = 0
-
-let audiobox = reactive([
-  {
-    index: 1,
-    musicname: 'daisy',
-    url: 'http://www.acgnb.com/ban/%E3%80%90%E9%BB%91%E6%9A%97%E4%B9%8B%E5%A5%B3%20%E5%AE%89%E5%A6%AE%E3%80%91%E5%86%8D%E7%83%A6%EF%BC%8C%E6%88%91%E5%B0%B1%E6%89%93%E4%BD%A0%E5%93%A6%E3%80%82-0_1.wav',
+  props:{
+    urls: Array
   },
-  {
-    index: 2,
-    musicname: '千板',
-    url: 'http://www.acgnb.com/ban/%E3%80%90%E9%BB%91%E6%9A%97%E4%B9%8B%E5%A5%B3%20%E5%AE%89%E5%A6%AE%E3%80%91%E5%86%8D%E7%83%A6%EF%BC%8C%E6%88%91%E5%B0%B1%E6%89%93%E4%BD%A0%E5%93%A6%E3%80%82-0_1.wav',
-  },
-  {
-    index: 3,
-    musicname: '千板55',
-    url: 'http://www.acgnb.com/ban/%E3%80%90%E9%BB%91%E6%9A%97%E4%B9%8B%E5%A5%B3%20%E5%AE%89%E5%A6%AE%E3%80%91%E5%86%8D%E7%83%A6%EF%BC%8C%E6%88%91%E5%B0%B1%E6%89%93%E4%BD%A0%E5%93%A6%E3%80%82-0_1.wav',
-  },
-])
-let playMode: Number = 0 //0:一次性(默认) 1：顺序 2：循环 3：随机 // 显示名字
+  setup(props,context) {
+    const { urls } = toRefs(props)
+    console.log(urls,'1')
 
-let showname: any = ref('未选择歌曲') // 单曲播放
-const singlePlay = () => {
-  playMode = 0
-} // 顺序
-const orderPlay = () => {
-  playMode = 1
-} //循环
-const cyclePlay = () => {
-  playMode = 2
-} // 随机播放
-const randomPlay = () => {
-  playMode = 3
-} // 随机播放方法
+onBeforeMount(() => {
+  clearInterval(timeInterval.value)
+})
 
-const randdomPlayfn = () => {
-  let i = audiobox.length
-  while (i) {
-    let j = Math.floor(Math.random() * i--)
-    ;[audiobox[j], audiobox[i]] = [audiobox[i], audiobox[j]]
-  }
-} // 下一首
+const speedVisible = ref<boolean>(false) // 设置音频播放速度弹窗
+const audioRef = ref() // 音频标签对象
+const activeSpeed = ref(1) // 音频播放速度
+const audioDuration = ref(0) // 音频总时长
+const audioCurrent = ref(0) // 音频当前播放时间
+const audioVolume = ref(1) // 音频声音，范围 0-1
+const playStatus = ref<boolean>(false) // 音频播放状态：true 播放，false 暂停
+const playProgress = ref(0) // 音频播放进度
+const timeInterval = ref() // 获取音频播放进度定时器
 
-const nextMusic = () => {
-  pause()
-  if (++i > audiobox.length - 1) {
-    i = 0
-  }
-  let song = audiobox[i]
-  audio.value.src = song.url
-  showname.value = song.musicname
-  audioplay() // console.log('正在播放第' + (i + 1) + '首');
-} // 上一首
-const lastMusic = () => {
-  pause()
-  let song
-  i > 0 ? --i : (i = audiobox.length - 1)
-  audio.value.src = audiobox[i].url
-  showname.value = audiobox[i].musicname
-
-  audioplay() // console.log('正在播放第' + (i + 1) + '首');
+// 音频加载完毕的回调
+const onCanplay = () => {
+  audioDuration.value = audioRef?.value.duration || 0
 }
 
-const chancurren = () => {
-  //改变进度
-  let ct = (progress.value * Musicduration.value) / 100
-  if (!isNaN(ct)) {
-    audio.value.currentTime = ct
-  } // console.log(progress)
-} // 改变音量
-const changevolumes = () => {
-  let ct = volumes.value / 100 // if (!isNan(ct)) {
-  audio.value.volume = ct // } // console.log(ct);
-} // 加载当前播放时间
-const getCurr = () => {
-  // currentTime 当前时间
-  MusiccurrentTime.value = parseInt(audio.value.currentTime)
-  progress.value = (MusiccurrentTime.value / Musicduration.value) * 100
-  if (MusiccurrentTime.value == Musicduration.value) {
-    switch (playMode) {
-      case 0:
-        pause()
-        return (aplayer.value = 'src/static/img/aplayer/play.png')
-        break
-      case 1:
-        nextMusic()
-        break
-      case 2:
-        audioplay()
-        break
-      case 3:
-        pause()
-        randdomPlayfn()
-        if (i != 0) i = 0
-        audio.value.src = audiobox[i].url
-        showname.value = audiobox[i].musicname
-        audioplay()
-        console.log(audiobox[i])
-        break
+const onPlay = async () => {
+  // 音频播放完后，重新播放
+  if (playProgress.value === 100) audioRef.value.currentTime = 0
+  await audioRef.value.play()
+  playStatus.value = true
+  audioDuration.value = audioRef.value.duration
 
-      default:
-        break
-    }
-  }
-} // 加载总时长
-const onLoadedmetadata = () => {
-  // duration 期间
-  Musicduration.value = parseInt(audio.value.duration) // console.log(); // 默认声音70%
-  volumes.value = parseInt(audio.value.volume) * 70
+  timeInterval.value = setInterval(() => {
+    audioCurrent.value = audioRef.value.currentTime
+    playProgress.value = audioCurrent.value / audioDuration.value * 100
+    console.log(playProgress.value)
+    if (playProgress.value === 100) onPause()
+  }, 100)
 }
-
-const toTime = (sec): Number => {
-  //秒数转化为mm:ss形式
-  let s = sec % 60 < 10 ? '0' + (sec % 60) : sec % 60
-  let min =
-    Math.floor(sec / 60) < 10
-      ? '0' + Math.floor(sec / 60)
-      : Math.floor(sec / 60)
-  if (!isNaN(s)) {
-    return min + ':' + s
-  } else {
-    return '00' + ':' + '00'
-  } // console.log(min +" "+ s);
-} // status 状态 // 播放或者暂停
-const startPlayOrpause = () => {
-  playing ? pause() : audioplay()
-  playing
-    ? (aplayer.value = 'src/static/img/aplayer/play.png')
-    : (aplayer.value = 'src/static/img/aplayer/pause.png') // console.log(audio.value); // console.log(audiobox);
-} // 播放
-const audioplay = () => {
-console.log(audio,'audio')
-
-  if (audio.value.src == '') {
-    audio.value.src = audiobox[i].url
-    showname.value = audiobox[i].musicname
-  }
-  audio.value.play()
-
-  return (aplayer.value = 'src/static/img/aplayer/pause.png')
-} // 暂停
-const pause = () => {
-  audio.value.pause()
-  return (aplayer.value = 'src/static/img/aplayer/pause.png')
-} //是否暂停状态
 const onPause = () => {
-  playing = false
-} //是否播放状态
-const onPlay = () => {
-  playing = true
+  audioRef.value.pause()
+  playStatus.value = false
+  clearInterval(timeInterval.value)
 }
+
+
+
+// 音频播放时间换算
+const transTime = (value: number) => {
+  let time = ''
+  let h = parseInt(String(value / 3600))
+  value %= 3600
+  let m = parseInt(String(value / 60))
+  let s = parseInt(String(value % 60))
+  if (h > 0) {
+    time = formatTime(h + ':' + m + ':' + s)
+  } else {
+    time = formatTime(m + ':' + s)
+  }
+  return time
+}
+// 格式化时间显示，补零对齐
+const formatTime = (value: string) => {
+  let time = ''
+  let s = value.split(':')
+  let i = 0
+  for (; i < s.length - 1; i++) {
+    time += s[i].length == 1 ? '0' + s[i] : s[i]
+    time += ':'
+  }
+  time += s[i].length == 1 ? '0' + s[i] : s[i]
+
+  return time
+}
+
     return {
       PlaySkipBackSharp,
       PlaySkipForwardSharp,
       PlayCircle,
-      Pause,
+      PauseCircleOutline,
       RepeatOutline,
       MenuSharp,
-      nextMusic,
-      lastMusic,
-      randomPlay,
-      startPlayOrpause
+      ArrowDown,
+      formatTime,
+      transTime,
+      onPause,
+      onPlay,
+      onCanplay,
+      speedVisible,
+      audioRef,
+      activeSpeed,
+      audioDuration,
+      audioCurrent,
+      audioVolume,
+      playStatus,
+      playProgress,
+      timeInterval,
+      changeColor
     }
   },
-  
 })
-</script>
 
-<style scoped></style>
+</script>
+<style scoped>
+.audio-player {
+  width: 378px;
+  height: 52px;
+  background: linear-gradient(180deg, #505572 0%, #383b4f 100%);
+  border-radius: 8px;
+  padding: 9px 11px;
+  margin: 40px 26px 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+
+.play-icon {
+    width: 34px;
+    height: 34px;
+    margin-right: 7px;
+    cursor: pointer;
+  }
+
+  .play-time {
+    width: 72px;
+    display: inline-block;
+    margin-right: 16px;
+  }
+
+  .play-progress {
+    width: 160px;
+    height: 4px;
+    background-color: #323547;
+    box-shadow: inset 0px 1px 0px 0px #20222d;
+    border-radius: 2px;
+    margin-right: 16px;
+    position: relative;
+   
+  }
+  .play-current-progress {
+      height: 4px;
+      background: #00e5ff;
+      border-radius: 2px;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+  .play-voice {
+    width: 20px;
+    height: 20px;
+    margin-right: 14px;
+    cursor: pointer;
+  }
+
+  .play-speed {
+    cursor: pointer;
+    color: #00e5ff;
+  }
+</style>
