@@ -1,5 +1,14 @@
 <template>
+  <div>
+	<NuxtLayout name="default">
+    <template #content>
+      123
+      </template>
+</NuxtLayout>
+</div>
   <div class="bg-white">
+   
+
     <div class="mx-auto max-w-2xl py-6 px-4 sm:py-6 sm:px-6 lg:max-w-6xl lg:px-8">
       <div class=" mt-6 grid grid-cols-2 gap-y-10 gap-x-6  sm:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 xl:gap-x-4">
         <a v-for="product in products" :key="product.id" :href="product.href" class="group">

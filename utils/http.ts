@@ -40,8 +40,8 @@ export default new class Http {
     return fetch(url, { method: 'get', params })
   }
 
-  post(url: string, params?: any): Promise<any> {
-    return fetch(url, { method: 'post', params })
+  post(url: string, body?: any): Promise<any> {
+    return fetch(url, { method: 'post', body })
   }
 
   put(url: string, body?: any): Promise<any> {

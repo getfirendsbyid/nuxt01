@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed  justify-center w-auto  h-auto bottom-0 inset-x-0  bg-white text-black " >    
+  <div class="justify-center  bg-white text-black " >    
     <n-progress
     type="line"
     :percentage=" parseInt(playProgress)"
@@ -74,8 +74,6 @@
 
     </div>
   </div>
-  
-  {{urls}}
   <audio ref="audioRef"
          :src="urls[0].url"
          @canplay="onCanplay"></audio>
