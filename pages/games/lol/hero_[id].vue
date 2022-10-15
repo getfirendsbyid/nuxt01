@@ -1,12 +1,9 @@
 <template>
-		
-
-
-
-  <div ref="containerRef"
-       >
-    <div class="flex pl-4 pr-4 justify-center ">
-      <div class="mt-4 h-auto">
+ <NuxtLayout name="default">
+	<template #content>      
+   
+    <div class=" pl-4 pr-4 justify-center ">
+      <div class=" ">
         <n-list hoverable
                 clickable>
           <n-list-item v-for="(item,index) in heroInfo.audio"
@@ -27,10 +24,11 @@
           </n-list-item>
         </n-list>
       </div>
-      
     </div>
+  </template>
 
-    <div class="fixed  w-auto  h-auto bottom-0 inset-x-0  bg-white p-2">
+  <template #footer>
+    <div class=" w-auto  h-auto bottom-0 inset-x-0  bg-white p-2">
       <div class="flex justify-center mb-2 ">
         <n-button dashed
                   v-for="(item,index) in heroInfo.skin"
@@ -45,17 +43,20 @@
                         :page-slot="6" />
         </clientg-only>
       </div>
-
       <AudioPlayer :urls="url" />
     </div>
-    
-  </div>
-
+  </template>
+  </NuxtLayout>  
+  
+  
 </template>
 <script setup lang="ts">
 import { getHeroInfo } from '@/api/lol'
 import { ref, defineComponent } from 'vue'
 const route = useRoute()
+definePageMeta({
+  	layout: false,
+});
 
 const url = [
   {

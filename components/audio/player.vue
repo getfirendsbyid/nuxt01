@@ -24,13 +24,13 @@
 
       <div class="flex flex-row justify-between  items-center">
 
-        <n-icon size="30"
+        <n-icon size="20"
                 @click="lastMusic"
                 title="上一首">
           <PlaySkipBackSharp />
         </n-icon>
 
-        <n-icon size="60"
+        <n-icon size="40"
                 class="ml-2 mr-2"
                 color="red"
                 title="播放"
@@ -39,7 +39,7 @@
           <PlayCircle />
 
         </n-icon>
-        <n-icon size="60"
+        <n-icon size="40"
         class="ml-2 mr-2"
                 color="red"
                 v-else
@@ -49,7 +49,7 @@
           <PauseCircleOutline  />
         </n-icon>
 
-        <n-icon size="30"
+        <n-icon size="20"
                
                 title="下一首">
           <PlaySkipForwardSharp />
@@ -57,12 +57,12 @@
 
       </div>
       <div class="flex flex-row justify-between  items-center">
-        <n-icon size="30"
+        <n-icon size="20"
                 color="#000"
                 title="点击下载语音">
           <ArrowDown />
         </n-icon>
-        <n-icon size="30"
+        <n-icon size="20"
                 color="#000"
                 title="菜单">
           <MenuSharp />

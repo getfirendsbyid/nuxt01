@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-local bg-clip-border bg-no-repeat bg-center md:bg-clip-padding h-16 sm:h-16 md:h-64 lg:h-64" style="background-color: rgba(40,42,44,.6);background-image: url('https://pic.rmb.bdstatic.com/bjh/30cf6d2919e00aadde0adffe89d436b1.jpeg')">
-    <Disclosure v-slot="{ }" as="nav" class="bg-gray-700 bg-opacity-40 " >
+  <div  class="bg-local bg-clip-border bg-no-repeat bg-center md:bg-clip-padding  h-16 sm:h-16 md:h-52 lg:h-52 fixed  top-0 inset-x-0" style="background-color: rgba(40,42,44,.6);background-image: url('https://pic.rmb.bdstatic.com/bjh/30cf6d2919e00aadde0adffe89d436b1.jpeg')">
+    <Disclosure v-slot="{ }" as="nav" class="fixed  top-0 inset-x-0 bg-gray-700 bg-opacity-40  h-16" >
       <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 bg-local fixed justify-center w-auto  top-0 inset-x-0  md:bg-fixed bg-clip-padding" >
         <div class="relative flex h-16 items-center justify-between">
           <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -73,11 +73,10 @@
     <DrawerBaseDrawer :navigation="navigation" :active="active" @eventClose="closeOrOpen" @eventSwitchNav="switchNavBar" />
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
-import { ref } from 'vue'
-
+import {  ref } from 'vue'
 // 导航栏相关逻辑 start
 const navigation = ref([
   { name: '首页', href: '/', current: true },
@@ -87,11 +86,11 @@ const navigation = ref([
 
 const active = ref(false)
 
-function closeOrOpen (bool) {
+function closeOrOpen (bool: boolean) {
   active.value = bool
 }
 
-function switchNavBar (index) {
+function switchNavBar (index: any) {
   navigation.value.forEach((item) => {
     console.log(item)
     item.current = false
