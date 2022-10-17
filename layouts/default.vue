@@ -17,34 +17,28 @@
 </div>
 </template>
 <script setup lang="ts">
-import { onMounted, reactive, ref, nextTick } from 'vue'
+import { onMounted, reactive, ref, nextTick,toRefs } from 'vue'
 const window = useWindowSize()
 const headerRef = ref<HTMLElement>();
 const footerRef = ref<HTMLElement>();
-
 const contentStyle = reactive({
-      height: "100%",
+     
 });
-console.log(window.height,'111')
 onMounted(() => {
   console.log('header高度是：', headerRef.value?.clientHeight)
   console.log('footer的高度是：', footerRef.value?.clientHeight)
   console.log('窗体的高度是：', window)
-
   contentStyle.height = String(window.height.value - Number(headerRef.value?.clientHeight) -  Number(footerRef.value?.clientHeight)) + 'px';
-
-  // contentRef.value?.clientHeight =  windowHeight - headerHeight - footerHeight;
   console.log('content的高度是：', contentStyle ) 
-  
 });
-
 watch(
   () => window.height.value,
   (pev, old) => {
     console.log(old,'old')
     console.log(pev) 
     contentStyle.height = String(window.height.value - Number(headerRef.value?.clientHeight) -  Number(footerRef.value?.clientHeight)) + 'px';
-
+    console.log(contentStyle)
+    toRefs(contentStyle)
   },{deep: true} 
 );
 // console.log(contentHeight)
