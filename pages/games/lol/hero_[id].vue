@@ -1,62 +1,74 @@
 <template>
- <NuxtLayout name="default">
-	<template #content>      
-   
-    <div class=" pl-4 pr-4 justify-center ">
-      <div class=" ">
-        <n-list hoverable
-                clickable>
-          <n-list-item v-for="(item,index) in heroInfo.audio"
-                       :key="index">
-            <n-thing :title="item.url"
-                     content-style="margin-top: 10px;">
-              <template #description>
-                <n-space size="small"
-                         style="margin-top: 4px">
-                  <n-tag :bordered="false"
-                         type="info"
-                         size="small">
-                    暑夜
-                  </n-tag>
-                </n-space>
-              </template>
-            </n-thing>
-          </n-list-item>
-        </n-list>
-      </div>
-    </div>
-  </template>
+  <NuxtLayout name="default">
+    <template #content>
 
-  <template #footer>
-    <div class=" w-auto  h-auto bottom-0 inset-x-0  bg-white p-2">
-      <div class="flex justify-center mb-2 ">
-        <n-button dashed
-                  v-for="(item,index) in heroInfo.skin"
-                  :key="index">
-          {{item.skin_name}}
-        </n-button>
+      <div class=" pl-4 pr-4 justify-center ">
+        <div class=" ">
+          <n-list hoverable
+                  clickable>
+            <n-list-item v-for="(item,index) in heroInfo.audio"
+                         :key="index">
+              <n-thing :title="item.name"
+                       content-style="margin-top: 10px;">
+                <template #description>
+                  <n-space size="small"
+                           style="margin-top: 4px">
+                    <n-tag :bordered="false"
+                           type="info"
+                           size="small">
+                      {{heroInfo.name}}
+                    </n-tag>
+                    <n-tag :bordered="false"
+                           type="info"
+                           size="small">
+                      {{heroInfo.title}}
+                    </n-tag>
+                    <n-tag :bordered="false"
+                           type="info"
+                           size="small">
+                      {{heroInfo.skin[0].skin_name}}
+                    </n-tag>
+                  </n-space>
+                </template>
+              </n-thing>
+              <template #suffix> 
+                <n-button>下载</n-button>
+              </template>
+            </n-list-item>
+          </n-list>
+        </div>
       </div>
-      <div class="flex justify-center  mb-2 ">
-        <clientg-only>
-          <n-pagination v-model:page="heroParams.page"
-                        :page-count="heroParams.limit"
-                        :page-slot="6" />
-        </clientg-only>
+    </template>
+
+    <template #footer>
+      <div class=" w-auto  h-auto bottom-0 inset-x-0  bg-white p-2">
+        <div class="flex justify-center mb-2 ">
+          <n-button dashed
+                    v-for="(item,index) in heroInfo.skin"
+                    :key="index">
+            {{item.skin_name}}
+          </n-button>
+        </div>
+        <div class="flex justify-center  mb-2 ">
+          <clientg-only>
+            <n-pagination v-model:page="heroParams.page"
+                          :page-count="heroParams.limit"
+                          :page-slot="6" />
+          </clientg-only>
+        </div>
+        <AudioPlayer :urls="url" />
       </div>
-      <AudioPlayer :urls="url" />
-    </div>
-  </template>
-  </NuxtLayout>  
-  
-  
+    </template>
+  </NuxtLayout>
+
 </template>
 <script setup lang="ts">
 import { getHeroInfo } from '@/api/lol'
 import { ref, defineComponent } from 'vue'
 const route = useRoute()
 definePageMeta({
-  	layout: false,
-});
+  layout: false,
+})
 
 const url = [
   {
