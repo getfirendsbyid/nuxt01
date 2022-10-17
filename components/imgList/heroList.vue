@@ -9,22 +9,20 @@
           {{ item.name }}
         </h3>
       </NuxtLink>
-  
     </div>
   </div>
-
 </template>
 
 <script lang="ts">
-import { ref, toRefs, defineComponent } from 'vue'
+import { toRefs, defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
     datas: Array
   },
-  setup (props, context) {
+  setup (props) {
     const { datas } = toRefs(props)
-    
+
     return {
       datas
     }

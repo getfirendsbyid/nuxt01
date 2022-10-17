@@ -1,86 +1,92 @@
 <template>
-  <div class="justify-center  bg-white text-black " >    
+  <div class="justify-center  bg-white text-black ">
     <n-progress
-    type="line"
-    :percentage=" parseInt(playProgress)"
-    :border-radius="4"
-    color="red"
-    height="2"
-   
-    :rail-color="changeColor('#C20C0C', { alpha: 0.2 })"
-  />
+      type="line"
+      :percentage=" parseInt(playProgress)"
+      :border-radius="4"
+      color="red"
+      height="2"
+
+      :rail-color="changeColor('#C20C0C', { alpha: 0.2 })"
+    />
     <div class=" flex flex-row justify-around ">
       <div class="flex flex-row justify-between  items-center text-center  w-auto">
         <div class="flex flex-row justify-center items-center text-center h-8">
-
-          <img class="rounded-full h-full w-8 object-top  flex items-center object-cover text-center justify-center"
-               src="https://game.gtimg.cn/images/lol/act/img/skinloading/1000.jpg" />
+          <img
+            class="rounded-full h-full w-8 object-top  flex items-center object-cover text-center justify-center"
+            :src="cover"
+          >
           <div class="flex flex-col ml-4  ">
             {{ transTime(audioCurrent) }}/{{ transTime(audioDuration) }}
-
           </div>
         </div>
       </div>
 
       <div class="flex flex-row justify-between  items-center">
-
-        <n-icon size="20"
-                @click="lastMusic"
-                title="上一首">
+        <n-icon
+          size="20"
+          title="上一首"
+          @click="lastMusic"
+        >
           <PlaySkipBackSharp />
         </n-icon>
 
-        <n-icon size="40"
-                class="ml-2 mr-2"
-                color="red"
-                title="播放"
-                @click="onPlay"
-                v-if="!playStatus">
+        <n-icon
+          v-if="!playStatus"
+          size="40"
+          class="ml-2 mr-2"
+          color="red"
+          title="播放"
+          @click="onPlay"
+        >
           <PlayCircle />
-
         </n-icon>
-        <n-icon size="40"
-        class="ml-2 mr-2"
-                color="red"
-                v-else
-                @click="onPause"
-                title="暂停">
-                
-          <PauseCircleOutline  />
+        <n-icon
+          v-else
+          size="40"
+          class="ml-2 mr-2"
+          color="red"
+          title="暂停"
+          @click="onPause"
+        >
+          <PauseCircleOutline />
         </n-icon>
 
-        <n-icon size="20"
-               
-                title="下一首">
+        <n-icon
+          size="20"
+
+          title="下一首"
+        >
           <PlaySkipForwardSharp />
         </n-icon>
-
       </div>
       <div class="flex flex-row justify-between  items-center">
-        <n-icon size="20"
-                color="#000"
-                title="点击下载语音">
+        <n-icon
+          size="20"
+          color="#000"
+          title="点击下载语音"
+        >
           <ArrowDown />
         </n-icon>
-        <n-icon size="20"
-                color="#000"
-                title="菜单">
+        <n-icon
+          size="20"
+          color="#000"
+          title="菜单"
+        >
           <MenuSharp />
         </n-icon>
-   
-        
       </div>
-
-
     </div>
   </div>
-  <audio ref="audioRef"
-         :src="urls[0].url"
-         @canplay="onCanplay"></audio>
+  <audio
+    ref="audioRef"
+    :src="'/'+urls[0].url"
+    @canplay="onCanplay"
+  />
 </template>
 
 <script lang="ts">
-import { ref,toRefs } from 'vue'
+import { ref, toRefs } from 'vue'
 import {
   PlaySkipBackSharp,
   PlaySkipForwardSharp,
@@ -97,85 +103,84 @@ export default defineComponent({
     PlaySkipForwardSharp,
     PlayCircle,
     PauseCircleOutline,
-    RepeatOutline,
+
     MenuSharp,
     ArrowDown
   },
-  props:{
-    urls: Array
+  props: {
+    urls: Array,
+    cover: String
   },
-  setup(props,context) {
-    const { urls } = toRefs(props)
-    console.log(urls,'1')
+  setup (props, context) {
+    const { urls, cover } = toRefs(props)
+    console.log(cover, '12312312')
+    console.log(urls, '12312312')
+    onBeforeMount(() => {
+      clearInterval(timeInterval.value)
+    })
 
-onBeforeMount(() => {
-  clearInterval(timeInterval.value)
-})
+    const speedVisible = ref<boolean>(false) // 设置音频播放速度弹窗
+    const audioRef = ref() // 音频标签对象
+    const activeSpeed = ref(1) // 音频播放速度
+    const audioDuration = ref(0) // 音频总时长
+    const audioCurrent = ref(0) // 音频当前播放时间
+    const audioVolume = ref(1) // 音频声音，范围 0-1
+    const playStatus = ref<boolean>(false) // 音频播放状态：true 播放，false 暂停
+    const playProgress = ref(0) // 音频播放进度
+    const timeInterval = ref() // 获取音频播放进度定时器
 
-const speedVisible = ref<boolean>(false) // 设置音频播放速度弹窗
-const audioRef = ref() // 音频标签对象
-const activeSpeed = ref(1) // 音频播放速度
-const audioDuration = ref(0) // 音频总时长
-const audioCurrent = ref(0) // 音频当前播放时间
-const audioVolume = ref(1) // 音频声音，范围 0-1
-const playStatus = ref<boolean>(false) // 音频播放状态：true 播放，false 暂停
-const playProgress = ref(0) // 音频播放进度
-const timeInterval = ref() // 获取音频播放进度定时器
+    // 音频加载完毕的回调
+    const onCanplay = () => {
+      audioDuration.value = audioRef?.value.duration || 0
+    }
 
-// 音频加载完毕的回调
-const onCanplay = () => {
-  audioDuration.value = audioRef?.value.duration || 0
-}
+    const onPlay = async () => {
+      // 音频播放完后，重新播放
+      if (playProgress.value === 100) { audioRef.value.currentTime = 0 }
+      await audioRef.value.play()
+      playStatus.value = true
+      audioDuration.value = audioRef.value.duration
 
-const onPlay = async () => {
-  // 音频播放完后，重新播放
-  if (playProgress.value === 100) audioRef.value.currentTime = 0
-  await audioRef.value.play()
-  playStatus.value = true
-  audioDuration.value = audioRef.value.duration
+      timeInterval.value = setInterval(() => {
+        audioCurrent.value = audioRef.value.currentTime
+        playProgress.value = audioCurrent.value / audioDuration.value * 100
+        console.log(playProgress.value)
+        if (playProgress.value === 100) { onPause() }
+      }, 100)
+    }
+    const onPause = () => {
+      audioRef.value.pause()
+      playStatus.value = false
+      clearInterval(timeInterval.value)
+    }
 
-  timeInterval.value = setInterval(() => {
-    audioCurrent.value = audioRef.value.currentTime
-    playProgress.value = audioCurrent.value / audioDuration.value * 100
-    console.log(playProgress.value)
-    if (playProgress.value === 100) onPause()
-  }, 100)
-}
-const onPause = () => {
-  audioRef.value.pause()
-  playStatus.value = false
-  clearInterval(timeInterval.value)
-}
+    // 音频播放时间换算
+    const transTime = (value: number) => {
+      let time = ''
+      const h = parseInt(String(value / 3600))
+      value %= 3600
+      const m = parseInt(String(value / 60))
+      const s = parseInt(String(value % 60))
+      if (h > 0) {
+        time = formatTime(h + ':' + m + ':' + s)
+      } else {
+        time = formatTime(m + ':' + s)
+      }
+      return time
+    }
+    // 格式化时间显示，补零对齐
+    const formatTime = (value: string) => {
+      let time = ''
+      const s = value.split(':')
+      let i = 0
+      for (; i < s.length - 1; i++) {
+        time += s[i].length == 1 ? '0' + s[i] : s[i]
+        time += ':'
+      }
+      time += s[i].length == 1 ? '0' + s[i] : s[i]
 
-
-
-// 音频播放时间换算
-const transTime = (value: number) => {
-  let time = ''
-  let h = parseInt(String(value / 3600))
-  value %= 3600
-  let m = parseInt(String(value / 60))
-  let s = parseInt(String(value % 60))
-  if (h > 0) {
-    time = formatTime(h + ':' + m + ':' + s)
-  } else {
-    time = formatTime(m + ':' + s)
-  }
-  return time
-}
-// 格式化时间显示，补零对齐
-const formatTime = (value: string) => {
-  let time = ''
-  let s = value.split(':')
-  let i = 0
-  for (; i < s.length - 1; i++) {
-    time += s[i].length == 1 ? '0' + s[i] : s[i]
-    time += ':'
-  }
-  time += s[i].length == 1 ? '0' + s[i] : s[i]
-
-  return time
-}
+      return time
+    }
 
     return {
       PlaySkipBackSharp,
@@ -201,7 +206,7 @@ const formatTime = (value: string) => {
       timeInterval,
       changeColor
     }
-  },
+  }
 })
 
 </script>
@@ -217,7 +222,6 @@ const formatTime = (value: string) => {
   display: flex;
   align-items: center;
 }
-
 
 .play-icon {
     width: 34px;
@@ -240,7 +244,7 @@ const formatTime = (value: string) => {
     border-radius: 2px;
     margin-right: 16px;
     position: relative;
-   
+
   }
   .play-current-progress {
       height: 4px;
