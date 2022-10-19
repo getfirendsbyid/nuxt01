@@ -75,7 +75,7 @@
     </div>
   </div>
   <audio ref="audioRef"
-         :src="urls[0].url"
+         :src="audioInfo.audio[currentIndex].audioUrl"
          @canplay="onCanplay"></audio>
 </template>
 
@@ -102,11 +102,12 @@ export default defineComponent({
     ArrowDown
   },
   props:{
-    urls: Array
+    audioInfo: Array,
+    currentIndex:Number
   },
   setup(props,context) {
-    const { urls } = toRefs(props)
-    console.log(urls,'1')
+    const { audioInfo,currentIndex} = toRefs(props)
+    console.log(audioInfo,'1')
 
 onBeforeMount(() => {
   clearInterval(timeInterval.value)
@@ -199,7 +200,9 @@ const formatTime = (value: string) => {
       playStatus,
       playProgress,
       timeInterval,
-      changeColor
+      changeColor,
+      audioInfo,
+      currentIndex
     }
   },
 })

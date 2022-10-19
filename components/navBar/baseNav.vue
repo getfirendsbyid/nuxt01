@@ -13,8 +13,12 @@
           </div>
           <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div class="flex flex-shrink-0 items-center">
+              <NuxtLink to="/" alt="返回首页">
               <img class="block h-8 w-auto lg:hidden" src="/logo.png" alt="Your Company">
+            </NuxtLink>
+            <NuxtLink  to="/" alt="返回首页">
               <img class="hidden h-8 w-auto lg:block" src="/logo.png" alt="Your Company">
+            </NuxtLink>
             </div>
             <div class="hidden sm:ml-6 sm:block">
               <div class="flex space-x-4">

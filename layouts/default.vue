@@ -22,7 +22,7 @@ const window = useWindowSize()
 const headerRef = ref<HTMLElement>();
 const footerRef = ref<HTMLElement>();
 const contentStyle = reactive({
-     
+     height:String
 });
 onMounted(() => {
   console.log('header高度是：', headerRef.value?.clientHeight)
