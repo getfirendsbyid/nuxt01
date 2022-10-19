@@ -13,10 +13,10 @@
           </div>
           <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div class="flex flex-shrink-0 items-center">
-              <NuxtLink to="/">
+              <NuxtLink to="/" alt="返回首页">
                 <img class="block h-8 w-auto lg:hidden" src="/logo.png" alt="轻语-全网最全游戏语音集合网站">
               </NuxtLink>
-              <NuxtLink to="/">
+              <NuxtLink to="/" alt="返回首页">
                 <img class="hidden h-8 w-auto lg:block" src="/logo.png" alt="轻语-全网最全游戏语音集合网站">
               </NuxtLink>
             </div>
@@ -78,7 +78,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import { Disclosure, DisclosureButton, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
 // 导航栏相关逻辑 start

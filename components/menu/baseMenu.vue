@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { defineComponent, h, ref, Component } from 'vue'
-import { NIcon, NConfigProvider, GlobalThemeOverrides, useMessage } from 'naive-ui'
+import { NIcon, GlobalThemeOverrides } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
 
 const themeOverrides: GlobalThemeOverrides = {

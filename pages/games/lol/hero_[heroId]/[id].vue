@@ -1,6 +1,13 @@
 <template>
   <NuxtLayout name="default">
     <template #content>
+      <n-empty
+        v-if="heroInfo.audio.length==0"
+        class="mt-64"
+        size="large"
+        description="没有语音咯~"
+      />
+
       <div class=" pl-4 pr-4 justify-center ">
         <div class=" ">
           <n-list
@@ -14,6 +21,7 @@
               <n-thing
                 :title="item.name"
                 content-style="margin-top: 10px;"
+                @click="selectAudio(index)"
               >
                 <template #description>
                   <n-space
@@ -44,12 +52,6 @@
                   </n-space>
                 </template>
               </n-thing>
-              <template #prefix>
-                <img
-                  class="rounded-full h-8 w-8 max-w-prose object-top  flex items-center object-cover text-center justify-center"
-                  :src="cover"
-                >
-              </template>
               <template #suffix>
                 <n-button>下载</n-button>
               </template>
@@ -60,7 +62,7 @@
     </template>
 
     <template #footer>
-      <div class=" w-auto  h-auto bottom-0 inset-x-0  bg-white p-2">
+      <div v-if="heroInfo.audio.length!=0" class=" w-auto  h-auto bottom-0 inset-x-0  bg-white p-2">
         <div class="flex justify-center mb-2 ">
           <n-button
             v-for="(item,index) in heroInfo.skin"
@@ -74,46 +76,61 @@
           <clientg-only>
             <n-pagination
               v-model:page="heroParams.page"
-              :page-count="heroParams.limit"
+              :page-count="heroInfo.pageCount"
               :page-slot="6"
+              :on-update:page="changePage"
+              :on-update:page-size="changeLimit"
             />
           </clientg-only>
         </div>
-        <AudioPlayer :urls="heroInfo.audio" :cover="cover" />
+        <AudioPlayer
+          :audio-info="heroInfo"
+          :current-index="selectedIndex"
+        />
       </div>
     </template>
   </NuxtLayout>
 </template>
 <script setup lang="ts">
-import { ref, defineComponent } from 'vue'
+import { reject } from 'lodash'
+import { ref, reactive } from 'vue'
 import { getHeroInfo } from '@/api/lol'
 const route = useRoute()
+const page = route.params.id
+const heroId = route.params.heroId
+const selectedIndex = ref(0)
 definePageMeta({
   layout: false
 })
+const config = useRuntimeConfig()
+const audioAPiBase = config.public.audioApiBase // 你的接口地址
 
-const url = [
-  {
-    url: 'http://www.acgnb.com/audio/annie-安妮/base-黑暗之女 安妮/【黑暗之女 安妮】不要变成发抖的小喵喵。-1933305856.wav'
-  },
-  {
-    url: 'http://www.acgnb.com/audio/annie-安妮/base-黑暗之女 安妮/【黑暗之女 安妮】Yeah Tibers。-1035814192.wav'
-  }
-]
-
-const cover = 'https://game.gtimg.cn/images/lol/act/img/skinloading/' + route.params.id + '000.jpg'
-
-const heroParams = ref({
-  id: route.params.id,
-  skinId: '',
-  page: 1,
+const heroParams = reactive({
+  id: heroId,
+  skinId: Number,
+  page,
   limit: 20
 })
-const heroInfoRes = ref(await getHeroInfo(heroParams.value))
+
+const heroInfoRes = reactive(await getHeroInfo(heroParams))
+
 const heroInfo = heroInfoRes.value.data
+console.log(heroInfo.audio.length != 0, 'bool')
+if (heroInfo.audio != []) {
+  heroInfo.audio.forEach((audio: { url: string }) => {
+    audio.audioUrl = audioAPiBase + audio.url
+  })
+}
+
+const selectAudio = (index: Number) => {
+  selectedIndex.value = index
+  console.log(selectedIndex)
+}
+const changePage = (page: Number) => {
+  page = page
+}
+const changeLimit = (limit: Number) => {}
 // 分页组件到底部固定住
-const containerRef = ref<HTMLElement | undefined>(undefined)
-console.log(heroInfo)
 </script>
 <style scoped>
 .absolute-anchor-container {

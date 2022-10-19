@@ -9,6 +9,11 @@
 
       :rail-color="changeColor('#C20C0C', { alpha: 0.2 })"
     />
+    <div class="flex flex-row justify-around  ">
+      <div class="line-clamp-1">
+        {{ audioInfo.audio[currentIndex].name }}
+      </div>
+    </div>
     <div class=" flex flex-row justify-around ">
       <div class="flex flex-row justify-between  items-center text-center  w-auto">
         <div class="flex flex-row justify-center items-center text-center h-8">
@@ -26,6 +31,7 @@
         <n-icon
           size="20"
           title="上一首"
+          class="ml-2 mr-2"
           @click="lastMusic"
         >
           <PlaySkipBackSharp />
@@ -34,7 +40,7 @@
         <n-icon
           v-if="!playStatus"
           size="40"
-          class="ml-2 mr-2"
+
           color="red"
           title="播放"
           @click="onPlay"
@@ -44,7 +50,7 @@
         <n-icon
           v-else
           size="40"
-          class="ml-2 mr-2"
+
           color="red"
           title="暂停"
           @click="onPause"
@@ -54,20 +60,14 @@
 
         <n-icon
           size="20"
-
+          class="ml-2 mr-2"
           title="下一首"
+          @click="nextMusic"
         >
           <PlaySkipForwardSharp />
         </n-icon>
       </div>
       <div class="flex flex-row justify-between  items-center">
-        <n-icon
-          size="20"
-          color="#000"
-          title="点击下载语音"
-        >
-          <ArrowDown />
-        </n-icon>
         <n-icon
           size="20"
           color="#000"
@@ -78,9 +78,10 @@
       </div>
     </div>
   </div>
+
   <audio
     ref="audioRef"
-    :src="'/'+urls[0].url"
+    :src="audioInfo.audio[currentIndex].audioUrl"
     @canplay="onCanplay"
   />
 </template>
@@ -93,8 +94,7 @@ import {
   PlayCircle,
   PauseCircleOutline,
   RepeatOutline,
-  MenuSharp,
-  ArrowDown
+  MenuSharp
 } from '@vicons/ionicons5'
 import { changeColor } from 'seemly'
 export default defineComponent({
@@ -103,22 +103,17 @@ export default defineComponent({
     PlaySkipForwardSharp,
     PlayCircle,
     PauseCircleOutline,
-
-    MenuSharp,
-    ArrowDown
+    MenuSharp
   },
+
   props: {
-    urls: Array,
+    audioInfo: Array,
+    currentIndex: Number,
     cover: String
   },
   setup (props, context) {
-    const { urls, cover } = toRefs(props)
-    console.log(cover, '12312312')
-    console.log(urls, '12312312')
-    onBeforeMount(() => {
-      clearInterval(timeInterval.value)
-    })
-
+    console.log(props)
+    const { audioInfo, currentIndex } = toRefs(props)
     const speedVisible = ref<boolean>(false) // 设置音频播放速度弹窗
     const audioRef = ref() // 音频标签对象
     const activeSpeed = ref(1) // 音频播放速度
@@ -128,6 +123,8 @@ export default defineComponent({
     const playStatus = ref<boolean>(false) // 音频播放状态：true 播放，false 暂停
     const playProgress = ref(0) // 音频播放进度
     const timeInterval = ref() // 获取音频播放进度定时器
+    const lastAudioIndex = ref(0)
+    const nextAudioIndex = ref(0)
 
     // 音频加载完毕的回调
     const onCanplay = () => {
@@ -152,6 +149,25 @@ export default defineComponent({
       audioRef.value.pause()
       playStatus.value = false
       clearInterval(timeInterval.value)
+    }
+    const lastMusic = () => {
+      if (currentIndex.value - 1 < 0) {
+        lastAudioIndex.value = 0
+      } else {
+        lastAudioIndex.value = currentIndex.value - 1
+      }
+
+      context.emit('changeSelectIndex', lastAudioIndex.value)
+    }
+
+    const nextMusic = () => {
+      if (currentIndex.value + 1 > audioInfo.value.audio.length - 1) {
+        nextAudioIndex.value = audioInfo.value.audio.length - 1
+      } else {
+        nextAudioIndex.value = currentIndex.value + 1
+      }
+      console.log(nextAudioIndex.value)
+      context.emit('changeSelectIndex', nextAudioIndex.value)
     }
 
     // 音频播放时间换算
@@ -189,7 +205,6 @@ export default defineComponent({
       PauseCircleOutline,
       RepeatOutline,
       MenuSharp,
-      ArrowDown,
       formatTime,
       transTime,
       onPause,
@@ -204,7 +219,11 @@ export default defineComponent({
       playStatus,
       playProgress,
       timeInterval,
-      changeColor
+      changeColor,
+      audioInfo,
+      currentIndex,
+      lastMusic,
+      nextMusic
     }
   }
 })
