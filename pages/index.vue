@@ -6,13 +6,12 @@
           <div class="flex items-center text-left justify-between gap-y-10 gap-x-6 sm:grid-cols-2 ">
             <h2 class="font-bold tracking-tight text-gray-900 sm:text-base md:text-2xl lg:text-2xl">英雄联盟语音</h2>
             <NuxtLink class="font-bold tracking-tight text-gray-400 "
-                      to="/games/lol">更多</NuxtLink>
+                      to="/lol">更多</NuxtLink>
           </div>
           <ImgListHeroList :datas="lolData.data.lol" />
         </div>
       </div>
   </template>
-	<template #footer>321</template>
 </NuxtLayout>
 </template>
 <script setup lang="ts">

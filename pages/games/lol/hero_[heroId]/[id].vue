@@ -73,7 +73,7 @@
           </n-button>
         </div>
         <div class="flex justify-center  mb-2 ">
-          <clientg-only>
+          <!-- <clientg-only>
             <n-pagination
               v-model:page="heroParams.page"
               :page-count="heroInfo.pageCount"
@@ -81,7 +81,8 @@
               :on-update:page="changePage"
               :on-update:page-size="changeLimit"
             />
-          </clientg-only>
+          </clientg-only> -->
+
         </div>
         <AudioPlayer
           :audio-info="heroInfo"

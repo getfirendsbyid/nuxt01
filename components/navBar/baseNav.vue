@@ -35,7 +35,7 @@
             </button>
 
             <!-- Profile dropdown -->
-            <Menu as="div" class="relative ml-3">
+            <!-- <Menu as="div" class="relative ml-3">
               <div>
                 <MenuButton class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                   <span class="sr-only">打开导航栏</span>
@@ -68,7 +68,7 @@
                   </MenuItem>
                 </MenuItems>
               </transition>
-            </Menu>
+            </Menu> -->
           </div>
         </div>
       </div>

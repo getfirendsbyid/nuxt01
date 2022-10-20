@@ -8,7 +8,6 @@
   <div ref="contentRef" id="content" :style="contentStyle" class="overflow-auto  mt-16 sm:mt-16 md:mt-52 lg:mt-52">
     <n-scrollbar >
       <slot name="content"></slot>
-  
   </n-scrollbar>
 </div>
  <div ref="footerRef" id="footer" class="fixed  w-auto  h-auto bottom-0 inset-x-0  bg-white p-2">
