@@ -38,25 +38,16 @@
           </n-list-item>
         </n-list>
       </div>
+      <Skin/>
     </template>
+ 
     <template #footer>
       <div
         v-if="heroInfo.audio.length != 0"
         class="w-auto h-auto bottom-0 inset-x-0 bg-white p-2"
       >
-        <div class="flex justify-center mb-2">
-          <n-button v-for="(item, index) in heroInfo.skin" :key="index" dashed>
-            {{ item.skin_name }}
-          </n-button>
-        </div>
-        <div class="flex justify-center mb-2">
-          <clientg-only>
-            <n-pagination
-              :page="heroParams.page"
-              :page-count="heroInfo.pageCount"
-              :page-slot="6"
-            />
-          </clientg-only>
+        <div class="flex justify-center ">
+          <PaginationBasePagination/>
         </div>
         <AudioPlayer
           :audio-info="heroInfo"
