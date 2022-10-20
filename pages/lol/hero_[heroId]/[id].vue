@@ -84,7 +84,7 @@ const audioAPiBase = config.public.audioApiBase // 你的接口地址
 
 const heroParams = reactive({
   id: heroId,
-  skinId: Number,
+  skinId: 0,
   page,
   limit: 20
 })
