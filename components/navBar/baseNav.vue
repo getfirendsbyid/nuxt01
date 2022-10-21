@@ -1,7 +1,7 @@
 <template>
-  <div  class="bg-local bg-clip-border bg-no-repeat bg-center md:bg-clip-padding  h-16 sm:h-16 md:h-52 lg:h-52 fixed  top-0 inset-x-0" style="background-color: rgba(40,42,44,.6);background-image: url('https://pic.rmb.bdstatic.com/bjh/30cf6d2919e00aadde0adffe89d436b1.jpeg')">
-    <Disclosure v-slot="{ }" as="nav" class="fixed  top-0 inset-x-0 bg-gray-700 bg-opacity-40  h-16" >
-      <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 bg-local fixed justify-center w-auto  top-0 inset-x-0  md:bg-fixed bg-clip-padding" >
+  <div class="bg-local bg-clip-border bg-no-repeat bg-center md:bg-clip-padding  h-16 sm:h-16 md:h-52 lg:h-52 fixed  top-0 inset-x-0" style="background-color: rgba(40,42,44,.6);background-image: url('https://pic.rmb.bdstatic.com/bjh/30cf6d2919e00aadde0adffe89d436b1.jpeg')">
+    <Disclosure v-slot="{ }" as="nav" class="fixed  top-0 inset-x-0 bg-gray-700 bg-opacity-40  h-16">
+      <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 bg-local fixed justify-center w-auto  top-0 inset-x-0  md:bg-fixed bg-clip-padding">
         <div class="relative flex h-16 items-center justify-between">
           <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
             <!-- Mobile menu button-->
@@ -13,13 +13,17 @@
           </div>
           <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div class="flex flex-shrink-0 items-center">
-              <img class="block h-8 w-auto lg:hidden" src="/logo.png" alt="Your Company">
-              <img class="hidden h-8 w-auto lg:block" src="/logo.png" alt="Your Company">
+              <NuxtLink to="/" alt="返回首页">
+                <img class="block h-8 w-auto lg:hidden" src="/logo.png" alt="轻语-全网最全游戏语音集合网站">
+              </NuxtLink>
+              <NuxtLink to="/" alt="返回首页">
+                <img class="hidden h-8 w-auto lg:block" src="/logo.png" alt="轻语-全网最全游戏语音集合网站">
+              </NuxtLink>
             </div>
             <div class="hidden sm:ml-6 sm:block">
               <div class="flex space-x-4">
                 <client-only>
-                  <MenuBaseMenu  />
+                  <MenuBaseMenu />
                 </client-only>
               </div>
             </div>
@@ -31,10 +35,10 @@
             </button>
 
             <!-- Profile dropdown -->
-            <Menu as="div" class="relative ml-3">
+            <!-- <Menu as="div" class="relative ml-3">
               <div>
                 <MenuButton class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                  <span class="sr-only">Open user menu</span>
+                  <span class="sr-only">打开导航栏</span>
                   <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
                 </MenuButton>
               </div>
@@ -64,7 +68,7 @@
                   </MenuItem>
                 </MenuItems>
               </transition>
-            </Menu>
+            </Menu> -->
           </div>
         </div>
       </div>
@@ -74,9 +78,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import { Disclosure, DisclosureButton, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
-import {  ref } from 'vue'
+import { ref } from 'vue'
 // 导航栏相关逻辑 start
 const navigation = ref([
   { name: '首页', href: '/', current: true },
