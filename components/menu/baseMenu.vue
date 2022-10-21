@@ -52,7 +52,8 @@ const menuOptions: MenuOption[] = [
   },
   {
     label: '原神',
-    key: '原神'
+    key: '原神',
+    url: '/games/Genshin'
   }
 ]
 function renderIcon (icon: Component) {

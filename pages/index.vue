@@ -20,7 +20,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { getHomeList } from '@/api/home'
-const lolData = ref(await getHomeList())
+const lolData = ref(await getHomeList());
+console.log(lolData,"lolData")
 definePageMeta({
   	layout: false
 })
