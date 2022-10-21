@@ -7,8 +7,8 @@ export default defineNuxtConfig({
     apiSecret: '', // can be overridden by NUXT_API_SECRET environment variable
     public: {
       // apiBase: 'http://api.acgnb.com' // can be overridden by NUXT_PUBLIC_API_BASE environment variable
-      // apiBase: 'http://192.168.2.116' 
-      apiBase: 'http://127.0.0.1' 
+      // apiBase: 'http://192.168.2.116'
+      apiBase: 'http://api.acgnb.com'
     }
   },
   modules: [
