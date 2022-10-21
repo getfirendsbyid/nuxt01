@@ -26,7 +26,7 @@
                     {{ heroInfo.title }}
                   </n-tag>
                   <n-tag :bordered="false" type="info" size="small">
-                    {{ heroInfo.skin[0].skin_name }}
+                    {{ heroInfo.skin[currentSkinIndex].skin_name }}
                   </n-tag>
                 </n-space>
               </template>
@@ -38,7 +38,7 @@
           </n-list-item>
         </n-list>
       </div>
-      <Skin/>
+      <Skin :data="skinList" :currentIndex="currentSkinIndex"/>
     </template>
  
     <template #footer>
@@ -47,7 +47,7 @@
         class="w-auto h-auto bottom-0 inset-x-0 bg-white p-2"
       >
         <div class="flex justify-center ">
-          <PaginationBasePagination/>
+          <PaginationBasePagination :pageArray="pageArray" :currentPage="page"/>
         </div>
         <AudioPlayer
           :audio-info="heroInfo"
@@ -66,6 +66,7 @@ import { getHeroInfo } from '@/api/lol'
 const route = useRoute()
 const page = route.params.id
 const heroId = route.params.heroId
+const skinId = route.params.skinId
 const selectedIndex = ref(0)
 definePageMeta({
   layout: false
@@ -75,17 +76,17 @@ const audioAPiBase = config.public.audioApiBase // 你的接口地址
 
 const heroParams = reactive({
   id: heroId,
-  skinId: 0,
+  skinId,
   page,
   limit: 20
 })
 
 const heroInfoRes = reactive(await getHeroInfo(heroParams))
 const heroInfo = heroInfoRes.value.data
+const skinList = heroInfoRes.value.data.skin
 if (heroInfo.audio.length !== 0) {
   heroInfo.audio.forEach((audio: { url: string }) => {
     audio.audioUrl = audioAPiBase + audio.url
-    console.log(audio.url)
   })
 }
 console.log(heroInfo)
@@ -94,9 +95,24 @@ const cover =
   'https://game.gtimg.cn/images/lol/act/img/skinloading/' +
   heroInfo.heroId +
   '000.jpg'
+const currentSkinIndex = ref(0)
+for (let index = 0; index < skinList.length; index++) {
+    const element = skinList[index];
+    if(element.id==skinId){
+      currentSkinIndex.value = index
+    }
+    element.link = '/lol/hero_'+heroId+'/skin_'+element.id+'/1'
+}
+const pageArray = reactive([]);
+for (let index = 0; index < heroInfo.pageCount; index++) {
+  let link = '/lol/hero_'+heroId+'/skin_'+skinId+'/'+(index+1)
+  pageArray.push({"link":link,"page":(index+1)})
+
+}
+console.log(pageArray)
 
 const selectAudio = (index: Number) => {
-  selectedIndex.value = index
+  selectedIndex.value = Number(index)
   console.log(selectedIndex.value)
 }
 </script>

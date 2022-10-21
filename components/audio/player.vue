@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs } from 'vue'
+import { ref, toRefs  } from 'vue'
 import {
   PlaySkipBackSharp,
   PlaySkipForwardSharp,
@@ -107,9 +107,12 @@ export default defineComponent({
   },
 
   props: {
-    audioInfo: Array,
+    audioInfo: Object,
     currentIndex: Number,
     cover: String
+  },
+  emits: {
+    changeSelectIndex: null
   },
   setup (props, context) {
     console.log(props)
